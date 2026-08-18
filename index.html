@@ -3,25 +3,21 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>BakeMaster Pro | Panaderia de Carlos y Ana - Firebase Cloud ERP</title>
+  <title>BakeMaster Pro | Sistema de Panadería & Obrador Artesanal</title>
   
   <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,600;0,700;1,600&display=swap" rel="stylesheet">
   
-  <!-- Lucide Icons & Chart.js & Confetti CDN -->
+  <!-- Lucide Icons & Chart.js CDN -->
   <script src="https://unpkg.com/lucide@latest"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 
-  <!-- Google Firebase App & Cloud Firestore SDKs (Compat v10) -->
-  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
-
   <link rel="stylesheet" href="styles.css">
 </head>
-<body class="theme-light mode-obrador role-admin">
+<body class="theme-light mode-obrador">
   <div class="app-layout">
     
     <!-- SIDEBAR NAVIGATION -->
@@ -33,7 +29,7 @@
           </div>
           <div class="brand-text">
             <h1 class="brand-title">BakeMaster<span>Pro</span></h1>
-            <p class="brand-subtitle">Panaderia de Carlos y Ana</p>
+            <p class="brand-subtitle">Panadería & Obrador Artesanal</p>
           </div>
         </div>
         <button class="sidebar-toggle-btn" id="sidebarCollapseBtn" title="Colapsar menú">
@@ -51,102 +47,74 @@
         </select>
       </div>
 
-      <!-- NAVIGATION MENU WITH ROLE-BASED ACCESS FILTERS -->
-      <nav class="sidebar-nav" id="sidebarNavMenu">
-        
-        <!-- SECTION: GENERAL & DUEÑO -->
-        <div class="nav-section-title nav-item-dueño" data-section="dash">PANEL PRINCIPAL</div>
-        <a href="#dashboard" class="nav-item active nav-item-dueño" data-view="dashboard" data-roles="admin">
+      <!-- NAVIGATION MENU -->
+      <nav class="sidebar-nav">
+        <div class="nav-section-title">ACTIVIDAD DEL DÍA</div>
+        <a href="#dashboard" class="nav-item active" data-view="dashboard">
           <i data-lucide="layout-dashboard"></i>
           <span>Resumen del Día</span>
           <span class="badge badge-success">En vivo</span>
         </a>
-
-        <!-- SECTION: MOSTRADOR / CAJA -->
-        <div class="nav-section-title nav-item-mostrador" data-section="caja">MOSTRADOR & CAJA</div>
-        <a href="#pos" class="nav-item nav-item-mostrador" data-view="pos" data-roles="admin,cajero">
+        <a href="#pos" class="nav-item" data-view="pos">
           <i data-lucide="shopping-cart"></i>
           <span>Cobrar a Clientes (Caja)</span>
           <span class="badge badge-primary" id="posCartCount">0</span>
         </a>
-        <a href="#caja" class="nav-item nav-item-mostrador" data-view="caja" data-roles="admin,cajero">
-          <i data-lucide="wallet"></i>
-          <span>Dinero en Caja (Turno)</span>
-          <span class="status-indicator open" title="Caja Abierta"></span>
-        </a>
-        <a href="#crm" class="nav-item nav-item-mostrador" data-view="crm" data-roles="admin,cajero">
-          <i data-lucide="users"></i>
-          <span>Clientes Frecuentes</span>
-        </a>
-
-        <!-- SECTION: OBRADOR / PANADERO -->
-        <div class="nav-section-title nav-item-panadero" data-section="obrador">HORNO & OBRADOR</div>
-        <a href="#produccion" class="nav-item nav-item-panadero" data-view="produccion" data-roles="admin,chef">
+        <a href="#produccion" class="nav-item" data-view="produccion">
           <i data-lucide="flame"></i>
           <span>Horno & Recetas</span>
         </a>
-        <a href="#inventario" class="nav-item nav-item-panadero" data-view="inventario" data-roles="admin,chef">
+        <a href="#inventario" class="nav-item" data-view="inventario">
           <i data-lucide="boxes"></i>
           <span>Ingredientes & Almacén</span>
           <span class="badge badge-warning" id="stockAlertBadge">3</span>
         </a>
-
-        <!-- SECTION: REPARTIDOR / ENVÍOS -->
-        <div class="nav-section-title nav-item-repartidor" data-section="envios">ENVÍOS & REPARTO</div>
-        <a href="#logistica" class="nav-item nav-item-repartidor" data-view="logistica" data-roles="admin,logistica">
-          <i data-lucide="map-pin"></i>
-          <span>Envíos & Entregas</span>
-          <span class="badge badge-primary" id="deliveriesBadge">3</span>
+        <a href="#caja" class="nav-item" data-view="caja">
+          <i data-lucide="wallet"></i>
+          <span>Dinero en Caja (Turno)</span>
+          <span class="status-indicator open" title="Caja Abierta"></span>
         </a>
-
-        <!-- SECTION: ASISTENTE & ADMINISTRACIÓN -->
-        <div class="nav-section-title nav-item-comun" data-section="ia">ASISTENTE INTELIGENTE</div>
-        <a href="#ia-assistant" class="nav-item nav-item-comun" data-view="ia-assistant" data-roles="admin,cajero,chef,logistica">
+        <a href="#ia-assistant" class="nav-item" data-view="ia-assistant">
           <i data-lucide="sparkles"></i>
           <span>Asistente PanaderIA</span>
           <span class="badge badge-ai">Voz & Chat</span>
         </a>
 
-        <!-- ADMINISTRATIVE ITEMS (ONLY DUEÑO / ADMIN) -->
-        <div class="admin-only-section" data-roles="admin">
-          <div class="nav-section-title">ADMINISTRACIÓN & NUBE</div>
-          <a href="#compras" class="nav-item nav-item-dueño" data-view="compras" data-roles="admin">
+        <!-- ADMINISTRATIVE ITEMS (HIDDEN IN MODO OBRADOR) -->
+        <div class="admin-only-section">
+          <div class="nav-section-title">ADMINISTRACIÓN & REPORTES</div>
+          <a href="#compras" class="nav-item" data-view="compras">
             <i data-lucide="truck"></i>
             <span>Compras a Proveedores</span>
           </a>
-          <a href="#auditoria" class="nav-item nav-item-dueño" data-view="auditoria" data-roles="admin">
+          <a href="#logistica" class="nav-item" data-view="logistica">
+            <i data-lucide="map-pin"></i>
+            <span>Envíos & Entregas</span>
+          </a>
+          <a href="#crm" class="nav-item" data-view="crm">
+            <i data-lucide="users"></i>
+            <span>Clientes Frecuentes</span>
+          </a>
+          <a href="#auditoria" class="nav-item" data-view="auditoria">
             <i data-lucide="history"></i>
             <span>Historial de Movimientos</span>
           </a>
-          <a href="#hardware" class="nav-item nav-item-dueño" data-view="hardware" data-roles="admin,cajero" onclick="navigateTo('hardware')">
-            <i data-lucide="printer"></i>
-            <span>Hardware & Periféricos</span>
-            <span class="badge badge-primary" style="font-size:0.65rem;">POS</span>
-          </a>
         </div>
-
-        <!-- SECTION: SUPERADMIN (Solo SuperAdmin) -->
-        <div class="nav-section-title nav-item-superadmin" id="navSectionSuperAdmin" style="display:none;">SUPER ADMINISTRADOR</div>
-        <a href="#superadmin" class="nav-item nav-item-superadmin" data-view="superadmin" id="navSuperAdmin" style="display:none;" onclick="navigateTo('superadmin')">
-          <i data-lucide="shield-check"></i>
-          <span>Panel SuperAdmin</span>
-          <span class="badge" style="background:linear-gradient(135deg,#7c3aed,#4f46e5);color:#fff;font-size:0.65rem;padding:2px 7px;">SA</span>
-        </a>
       </nav>
 
       <!-- USER PROFILE MINI CARD -->
       <div class="sidebar-user">
         <div class="user-avatar">
-          <img id="sidebarUserImg" src="https://images.unsplash.com/photo-1577219491135-ce391730fb2c?w=100&auto=format&fit=crop&q=80" alt="Avatar">
+          <img src="https://images.unsplash.com/photo-1577219491135-ce391730fb2c?w=100&auto=format&fit=crop&q=80" alt="Avatar">
           <span class="user-status-dot"></span>
         </div>
         <div class="user-info">
           <strong id="currentUserName">Carlos Mendoza</strong>
-          <span id="currentUserRole" class="user-role-badge">Dueño / Administrador</span>
+          <span id="currentUserRole" class="user-role-badge">Maestro Panadero</span>
         </div>
         <div class="user-actions">
-          <button class="icon-btn-subtle text-danger" onclick="showLockScreen()" title="Bloquear / Cambiar Usuario">
-            <i data-lucide="lock"></i>
+          <button id="roleSwitchBtn" class="icon-btn-subtle" title="Cambiar Rol">
+            <i data-lucide="refresh-cw"></i>
           </button>
         </div>
       </div>
@@ -170,15 +138,8 @@
 
         <div class="topbar-right">
           
-          <!-- BADGE DE ESTADO FIREBASE CLOUD FIRESTORE -->
-          <div class="firebase-cloud-pill" id="firebaseStatusPill" onclick="openModal('firebaseSyncModal')" title="Estado de la Base de Datos en la Nube Firebase">
-            <span class="cloud-dot-live"></span>
-            <i data-lucide="cloud"></i>
-            <span id="firebaseStatusText">Firebase: Panaderia de Carlos y Ana</span>
-          </div>
-
-          <!-- INTERRUPTOR DE MODO DE PERFIL (SOLO DUEÑO) -->
-          <div class="profile-mode-pill-toggle" id="ownerModeToggle" title="Cambiar perspectiva de la aplicación">
+          <!-- INTERRUPTOR DE MODO DE PERFIL (OBRADOR OPERATIVO vs MODO DUEÑO) -->
+          <div class="profile-mode-pill-toggle" title="Cambiar perspectiva de la aplicación">
             <button class="mode-pill-btn active" id="btnProfileObrador" onclick="setProfileMode('obrador')">
               <i data-lucide="chef-hat"></i>
               <span>Modo Obrador</span>
@@ -189,22 +150,16 @@
             </button>
           </div>
 
-          <!-- BOTÓN DE BLOQUEO DE SESIÓN POR PIN -->
-          <button class="btn btn-secondary btn-sm" onclick="showLockScreen()" title="Bloquear pantalla o cambiar usuario con PIN">
-            <i data-lucide="lock"></i>
-            <span>Cambiar Usuario</span>
-          </button>
+          <!-- Live Time & Status -->
+          <div class="system-time" id="systemClock">
+            <i data-lucide="clock"></i>
+            <span id="liveTime">12:00:00 PM</span>
+          </div>
 
           <!-- Quick Cash Status -->
           <div class="quick-cash-pill" id="quickCashBadge" title="Dinero en Caja" onclick="navigateTo('caja')">
             <span class="dot-live"></span>
-            <span>Caja: <strong id="topbarCashTotal">₡345,200</strong></span>
-          </div>
-
-          <!-- Live Time -->
-          <div class="system-time" id="systemClock">
-            <i data-lucide="clock"></i>
-            <span id="liveTime">12:00:00 PM</span>
+            <span>Caja de Hoy: <strong>₡345,200</strong></span>
           </div>
 
           <!-- Notification Center -->
@@ -234,22 +189,35 @@
                   </div>
                 </li>
                 <li class="notif-item">
-                  <div class="notif-icon success"><i data-lucide="cloud"></i></div>
+                  <div class="notif-icon success"><i data-lucide="check-circle-2"></i></div>
                   <div class="notif-content">
-                    <p class="notif-title">Sincronizado con Firebase</p>
-                    <span class="notif-time">Proyecto: Panaderia de Carlos y Ana</span>
+                    <p class="notif-title">Pedido Entregado a Restaurante</p>
+                    <span class="notif-time">Entrega confirmada en La Terraza</span>
+                  </div>
+                </li>
+                <li class="notif-item">
+                  <div class="notif-icon warning"><i data-lucide="clock"></i></div>
+                  <div class="notif-content">
+                    <p class="notif-title">Mantequilla por Vencer</p>
+                    <span class="notif-time">Quedan 3 días para usar el lote actual</span>
                   </div>
                 </li>
               </ul>
             </div>
           </div>
+
+          <!-- Quick Action Button -->
+          <button class="btn btn-primary btn-sm" id="btnQuickSale" onclick="navigateTo('pos')">
+            <i data-lucide="shopping-cart"></i>
+            <span>Cobrar Venta</span>
+          </button>
         </div>
       </header>
 
       <!-- BANDEJA DE ACCIONES TÁCTILES RÁPIDAS DEL OBRADOR -->
       <div class="obrador-quick-bar-wrapper">
         <div class="obrador-quick-bar">
-          <button class="quick-action-touch-btn bg-amber-soft btn-act-panadero" onclick="openQuickBakeModal()">
+          <button class="quick-action-touch-btn bg-amber-soft" onclick="openQuickBakeModal()">
             <div class="touch-icon bg-amber"><i data-lucide="flame"></i></div>
             <div class="touch-text">
               <strong>Sacar del Horno</strong>
@@ -257,7 +225,7 @@
             </div>
           </button>
 
-          <button class="quick-action-touch-btn bg-green-soft btn-act-mostrador" onclick="navigateTo('pos')">
+          <button class="quick-action-touch-btn bg-green-soft" onclick="navigateTo('pos')">
             <div class="touch-icon bg-green"><i data-lucide="shopping-cart"></i></div>
             <div class="touch-text">
               <strong>Cobrar a Cliente</strong>
@@ -265,7 +233,7 @@
             </div>
           </button>
 
-          <button class="quick-action-touch-btn bg-blue-soft btn-act-panadero" onclick="openQuickStockEntryModal()">
+          <button class="quick-action-touch-btn bg-blue-soft" onclick="openQuickStockEntryModal()">
             <div class="touch-icon bg-blue"><i data-lucide="package-plus"></i></div>
             <div class="touch-text">
               <strong>Llegó Harina / Insumos</strong>
@@ -273,7 +241,7 @@
             </div>
           </button>
 
-          <button class="quick-action-touch-btn bg-red-soft btn-act-panadero" onclick="openQuickWasteModal()">
+          <button class="quick-action-touch-btn bg-red-soft" onclick="openQuickWasteModal()">
             <div class="touch-icon bg-red"><i data-lucide="trash-2"></i></div>
             <div class="touch-text">
               <strong>Pan Sobrante / Roto</strong>
@@ -281,7 +249,7 @@
             </div>
           </button>
 
-          <button class="quick-action-touch-btn bg-purple-soft btn-act-comun" onclick="navigateTo('ia-assistant')">
+          <button class="quick-action-touch-btn bg-purple-soft" onclick="navigateTo('ia-assistant')">
             <div class="touch-icon bg-purple"><i data-lucide="mic"></i></div>
             <div class="touch-text">
               <strong>Hablar con PanaderIA</strong>
@@ -295,7 +263,7 @@
       <div class="content-body" id="appViews">
 
         <!-- ============================================== -->
-        <!-- VIEW 1: DASHBOARD (RESUMEN DEL DÍA - DUEÑO) -->
+        <!-- VIEW 1: DASHBOARD (RESUMEN DEL DÍA) -->
         <!-- ============================================== -->
         <section id="view-dashboard" class="app-view active">
           
@@ -306,7 +274,7 @@
                 <div class="morning-sun-icon"><i data-lucide="sun"></i></div>
                 <div>
                   <h3>☀️ Resumen Proactivo de Inicio de Turno</h3>
-                  <p class="morning-subtitle">PanaderIA analizó tu almacén, turnos de horno y fondo de caja en Firebase:</p>
+                  <p class="morning-subtitle">PanaderIA analizó tu almacén, turnos de horno y fondo de caja para hoy:</p>
                 </div>
               </div>
               <button class="btn-speech-play" id="btnSpeakMorning" onclick="toggleMorningSpeech()">
@@ -344,9 +312,9 @@
                 <i data-lucide="coins"></i>
               </div>
               <div class="kpi-details">
-                <span class="kpi-label">Ventas de Hoy (Nube)</span>
+                <span class="kpi-label">Ventas de Hoy</span>
                 <h3 class="kpi-value" id="kpiTotalSales">₡612,500</h3>
-                <span class="kpi-trend positive"><i data-lucide="cloud"></i> Sincronizado en Firestore</span>
+                <span class="kpi-trend positive"><i data-lucide="trending-up"></i> +14.8% vs promedio</span>
               </div>
             </div>
 
@@ -404,7 +372,7 @@
                 <div class="card-header">
                   <div class="card-title-group">
                     <h3><i data-lucide="clock"></i> Turnos de Horneado de Hoy</h3>
-                    <p class="card-subtitle">Sincronizados en Firebase Firestore en tiempo real</p>
+                    <p class="card-subtitle">Qué pan entra al horno y a qué hora</p>
                   </div>
                   <button class="btn btn-primary btn-sm" onclick="openQuickBakeModal()">
                     <i data-lucide="plus"></i> + Sacar del Horno
@@ -423,7 +391,34 @@
                         </tr>
                       </thead>
                       <tbody id="bakingScheduleTable">
-                        <!-- Injected via JS -->
+                        <tr>
+                          <td><strong>06:00 AM</strong></td>
+                          <td>Baguette Rústico Tradicional</td>
+                          <td>120 un</td>
+                          <td>22 min</td>
+                          <td><span class="status-pill status-completed">Listo ✅</span></td>
+                        </tr>
+                        <tr>
+                          <td><strong>07:30 AM</strong></td>
+                          <td>Croissant Francés de Mantequilla</td>
+                          <td>80 un</td>
+                          <td>18 min</td>
+                          <td><span class="status-pill status-completed">Listo ✅</span></td>
+                        </tr>
+                        <tr>
+                          <td><strong>10:00 AM</strong></td>
+                          <td>Pan de Masa Madre (Sourdough)</td>
+                          <td>45 un</td>
+                          <td>35 min</td>
+                          <td><span class="status-pill status-progress">En Horno 🔥</span></td>
+                        </tr>
+                        <tr>
+                          <td><strong>02:30 PM</strong></td>
+                          <td>Brioche Trenzado de Canela</td>
+                          <td>35 un</td>
+                          <td>25 min</td>
+                          <td><span class="status-pill status-pending">Esperando</span></td>
+                        </tr>
                       </tbody>
                     </table>
                   </div>
@@ -435,7 +430,7 @@
                 <div class="card-header">
                   <div class="card-title-group">
                     <h3><i data-lucide="award"></i> El Pan Más Vendido Hoy</h3>
-                    <p class="card-subtitle">Calculado con las ventas en nube</p>
+                    <p class="card-subtitle">Los favoritos de tus clientes</p>
                   </div>
                   <span class="badge badge-success">Top Ventas</span>
                 </div>
@@ -484,7 +479,7 @@
         </section>
 
         <!-- ============================================== -->
-        <!-- VIEW 2: PUNTO DE VENTA (COBRAR / MOSTRADOR) -->
+        <!-- VIEW 2: PUNTO DE VENTA (COBRAR / CAJA RÁPIDA) -->
         <!-- ============================================== -->
         <section id="view-pos" class="app-view">
           
@@ -494,8 +489,8 @@
               <div class="two-touch-title">
                 <i data-lucide="zap"></i>
                 <div>
-                  <h4>Cobro Ultra Rápido en 2 Toques (Productos Estrella)</h4>
-                  <p class="text-xs text-muted">1. Toca el pan estrella ➔ 2. Toca el método de pago (Guarda en Firebase al instante)</p>
+                  <h4>Cobro Ultra Rápido en 2 Toques</h4>
+                  <p class="text-xs text-muted">1. Toca el pan estrella ➔ 2. Toca el método de pago</p>
                 </div>
               </div>
               <span class="two-touch-badge">⚡ Express</span>
@@ -503,7 +498,7 @@
 
             <!-- Star Products Giant Grid -->
             <div class="star-products-grid" id="starProductsGrid">
-              <!-- Rendered by JS -->
+              <!-- Rendered by JS or HTML -->
             </div>
 
             <!-- 2-Touch Direct Payment Bar -->
@@ -533,7 +528,7 @@
               <div class="pos-filter-bar">
                 <div class="search-input-box">
                   <i data-lucide="search"></i>
-                  <input type="text" id="posSearchInput" placeholder="Buscar pan o café (ej. Croissant, Baguette)...">
+                  <input type="text" id="posSearchInput" placeholder="Toca aquí para buscar pan o café (ej. Croissant, Baguette)...">
                 </div>
                 <div class="pos-category-tabs" id="posCategoryTabs">
                   <button class="cat-tab active" data-cat="all">Todos</button>
@@ -557,7 +552,7 @@
                   <i data-lucide="receipt"></i>
                   <div>
                     <h3>Ticket de Venta #<span id="ticketNumber">1049</span></h3>
-                    <p class="cart-meta">Cajero: <span id="posCashierName">Valentina Ríos</span></p>
+                    <p class="cart-meta">Cajero: <span id="posCashierName">Carlos M.</span></p>
                   </div>
                 </div>
                 <button class="icon-btn-subtle" id="clearCartBtn" title="Vaciar Ticket">
@@ -586,7 +581,7 @@
                 <div class="empty-cart-state">
                   <i data-lucide="shopping-bag"></i>
                   <p>Ticket vacío</p>
-                  <small>Toca cualquier pan para cobrar</small>
+                  <small>Toca cualquier pan del menú para agregarlo</small>
                 </div>
               </div>
 
@@ -628,13 +623,13 @@
         </section>
 
         <!-- ============================================== -->
-        <!-- VIEW 3: HORNO & RECETAS (PANADERO / OBRADOR) -->
+        <!-- VIEW 3: HORNO & RECETAS (PRODUCCIÓN) -->
         <!-- ============================================== -->
         <section id="view-produccion" class="app-view">
           <div class="view-header-flex">
             <div>
-              <h2>Horno, Recetas & Producción del Obrador</h2>
-              <p class="text-muted">Calcula insumos por receta y anota las piezas horneadas (se guardan en tiempo real en Firebase).</p>
+              <h2>Horno, Recetas & Costos del Obrador</h2>
+              <p class="text-muted">Calcula ingredientes por receta, costos de harina y mantequilla en colones y anota el pan horneado.</p>
             </div>
             <div class="view-header-actions">
               <button class="btn btn-secondary" id="btnNewRecipe">
@@ -753,7 +748,7 @@
             <div class="card">
               <div class="card-header">
                 <div class="card-title-group">
-                  <h3>Lotes en el Horno (Firebase)</h3>
+                  <h3>Lotes en el Horno</h3>
                   <p class="card-subtitle">Panes que se están horneando en este momento</p>
                 </div>
                 <span class="badge badge-soft">En Producción</span>
@@ -817,7 +812,7 @@
                     </div>
                     <div class="form-group">
                       <label>Nota del Panadero (opcional):</label>
-                      <textarea id="wasteNotes" class="form-control" rows="2" placeholder="Ej: Variación de temperatura en piso 2"></textarea>
+                      <textarea id="wasteNotes" class="form-control" rows="2" placeholder="Ej: Variación de temperatura en horno piso 2"></textarea>
                     </div>
                     <button type="submit" class="btn btn-danger btn-block btn-lg">
                       <i data-lucide="trash-2"></i> Guardar en Desperdicio
@@ -858,13 +853,13 @@
         </section>
 
         <!-- ============================================== -->
-        <!-- VIEW 4: INVENTARIO & ALMACÉN (PANADERO / DUEÑO) -->
+        <!-- VIEW 4: INVENTARIO & ALMACÉN -->
         <!-- ============================================== -->
         <section id="view-inventario" class="app-view">
           <div class="view-header-flex">
             <div>
               <h2>Ingredientes & Almacén de la Panadería</h2>
-              <p class="text-muted">Control de existencias sincronizado en tiempo real con Firebase Firestore.</p>
+              <p class="text-muted">Revisa cuánta harina y mantequilla queda, qué se vence pronto y anota compras de sacos en colones.</p>
             </div>
             <div class="view-header-actions">
               <button class="btn btn-secondary" id="btnStockMovementModal">
@@ -953,7 +948,7 @@
         </section>
 
         <!-- ============================================== -->
-        <!-- VIEW 5: COMPRAS A PROVEEDORES (DUEÑO) -->
+        <!-- VIEW 5: COMPRAS A PROVEEDORES (ADMIN) -->
         <!-- ============================================== -->
         <section id="view-compras" class="app-view">
           <div class="view-header-flex">
@@ -1016,7 +1011,7 @@
         </section>
 
         <!-- ============================================== -->
-        <!-- VIEW 6: DINERO EN CAJA (MOSTRADOR / DUEÑO) -->
+        <!-- VIEW 6: DINERO EN CAJA (TURNO & BILLETES) -->
         <!-- ============================================== -->
         <section id="view-caja" class="app-view">
           <div class="view-header-flex">
@@ -1040,7 +1035,7 @@
                 <i data-lucide="vault"></i>
               </div>
               <div class="kpi-details">
-                <span class="kpi-label">Fondo Inicial de Caja</span>
+                <span class="kpi-label">Fondo con que Abrió Caja</span>
                 <h3 class="kpi-value" id="cashInitial">₡50,000</h3>
                 <span class="kpi-sub">Apertura: 06:00 AM</span>
               </div>
@@ -1053,7 +1048,7 @@
               <div class="kpi-details">
                 <span class="kpi-label">Vendido en Efectivo Hoy</span>
                 <h3 class="kpi-value text-success" id="cashInflow">₡285,400</h3>
-                <span class="kpi-sub">Cobros en mostrador</span>
+                <span class="kpi-sub">28 cobros en mostrador</span>
               </div>
             </div>
 
@@ -1075,7 +1070,7 @@
               <div class="kpi-details">
                 <span class="kpi-label">Gastos Menores Pagados</span>
                 <h3 class="kpi-value text-danger" id="cashOutflow">-₡15,000</h3>
-                <span class="kpi-sub">Salidas de caja</span>
+                <span class="kpi-sub">2 salidas del cajón</span>
               </div>
             </div>
           </div>
@@ -1114,7 +1109,7 @@
                     <span class="denom-subtotal" id="denom-1000">₡2,000</span>
                   </div>
                   <div class="denom-row">
-                    <span class="denom-label">Monedas Varias (₡500, ₡100...)</span>
+                    <span class="denom-label">Monedas Varias (₡500, ₡100, ₡50...)</span>
                     <input type="number" class="denom-input" data-value="1" min="0" value="400" oninput="calculateCashTally()">
                     <span class="denom-subtotal" id="denom-1">₡400</span>
                   </div>
@@ -1140,7 +1135,7 @@
             <div class="card">
               <div class="card-header">
                 <h3><i data-lucide="history"></i> Movimientos de Dinero Hoy</h3>
-                <span class="badge badge-soft">Sincronizado</span>
+                <span class="badge badge-soft">Caja #01</span>
               </div>
               <div class="card-body p-0">
                 <div class="table-responsive">
@@ -1165,13 +1160,13 @@
         </section>
 
         <!-- ============================================== -->
-        <!-- VIEW 7: ENVÍOS & ENTREGAS (REPARTIDOR) -->
+        <!-- VIEW 7: ENVÍOS & ENTREGAS (ADMIN) -->
         <!-- ============================================== -->
         <section id="view-logistica" class="app-view">
           <div class="view-header-flex">
             <div>
-              <h2>Envíos & Rutas de Entrega a Cafeterías</h2>
-              <p class="text-muted">Ruta de reparto en vivo asignada a Andrés Villa (Repartidor). Toca el botón para marcar entregado.</p>
+              <h2>Envíos & Entregas a Cafeterías</h2>
+              <p class="text-muted">Seguimiento de pedidos de pan a hoteles, cafeterías y restaurantes.</p>
             </div>
             <div class="view-header-actions">
               <button class="btn btn-primary btn-lg" id="btnNewDelivery">
@@ -1183,8 +1178,8 @@
           <div class="grid-2-cols">
             <div class="card">
               <div class="card-header">
-                <h3><i data-lucide="truck"></i> Mis Pedidos en Reparto Hoy</h3>
-                <span class="badge badge-primary" id="driverDeliveriesCount">3 En Camino</span>
+                <h3><i data-lucide="truck"></i> Pedidos en Camino</h3>
+                <span class="badge badge-primary">3 En Reparto</span>
               </div>
               <div class="card-body p-0">
                 <div class="delivery-list" id="deliveryOrdersList">
@@ -1195,14 +1190,14 @@
 
             <div class="card">
               <div class="card-header">
-                <h3><i data-lucide="map"></i> Ruta de Entrega Activa</h3>
-                <span class="badge badge-success">En Reparto</span>
+                <h3><i data-lucide="map"></i> Ruta de Entrega Hoy</h3>
+                <span class="badge badge-success">En Camino</span>
               </div>
               <div class="card-body">
                 <div class="simulated-map-container">
                   <div class="map-overlay-badge">Ruta Escazú - Repartidor: Andrés Villa (Moto 02)</div>
                   
-                  <div class="route-timeline" id="routeTimelineContainer">
+                  <div class="route-timeline">
                     <div class="timeline-step done">
                       <div class="step-icon"><i data-lucide="check"></i></div>
                       <div class="step-info">
@@ -1214,21 +1209,21 @@
                       <div class="step-icon"><i data-lucide="check"></i></div>
                       <div class="step-info">
                         <strong>Café San Ángel</strong>
-                        <span>08:45 AM - Entregado con éxito ✅</span>
+                        <span>08:45 AM - Entregado con éxito</span>
                       </div>
                     </div>
-                    <div class="timeline-step current" id="timelineStepHotel">
+                    <div class="timeline-step current">
                       <div class="step-icon"><i data-lucide="truck"></i></div>
                       <div class="step-info">
-                        <strong>Hotel Boutique Grano de Oro</strong>
+                        <strong>Hotel Grand Palace</strong>
                         <span>En camino (Llega en 10 min)</span>
                       </div>
                     </div>
-                    <div class="timeline-step pending" id="timelineStepRest">
+                    <div class="timeline-step pending">
                       <div class="step-icon"><i data-lucide="clock"></i></div>
                       <div class="step-info">
-                        <strong>Restaurante La Casona Gourmet</strong>
-                        <span>Programado 11:45 AM</span>
+                        <strong>Restaurante La Terraza</strong>
+                        <span>Programado 10:30 AM</span>
                       </div>
                     </div>
                   </div>
@@ -1239,7 +1234,7 @@
         </section>
 
         <!-- ============================================== -->
-        <!-- VIEW 8: CLIENTES FRECUENTES (MOSTRADOR / DUEÑO) -->
+        <!-- VIEW 8: CLIENTES FRECUENTES (ADMIN) -->
         <!-- ============================================== -->
         <section id="view-crm" class="app-view">
           <div class="view-header-flex">
@@ -1294,11 +1289,11 @@
             </div>
             <div>
               <h2>Asistente de Voz y Texto <span class="ai-name-highlight">PanaderIA</span></h2>
-              <p class="text-muted">Habla o escribe tal como lo haces en el obrador. Guarda y consulta tus datos en Firebase en tiempo real.</p>
+              <p class="text-muted">Habla o escribe tal como lo haces en el obrador. Puedes registrar ventas, horneadas o consultar existencias.</p>
             </div>
             <div class="ai-live-badge">
               <span class="dot-live"></span>
-              <span>Conectado a Firebase Cloud</span>
+              <span>Listo para escuchar</span>
             </div>
           </div>
 
@@ -1382,14 +1377,9 @@
               <div class="ai-bubble-msg ai">
                 <div class="ai-avatar"><i data-lucide="sparkles"></i></div>
                 <div class="ai-content">
-                  <p>¡Hola! Soy <strong>PanaderIA</strong>, tu asistente de panadería con voz natural conectado a <strong>Firebase Cloud</strong>.</p>
-                  <p>🗣️ Puedes decirme: <em>"Se vendieron 10 croissants"</em>, <em>"Sacamos 50 baguettes del horno"</em>, <em>"Compramos 50 kilos de harina"</em> o <em>"¿Cuánto hay en caja?"</em></p>
-                  <div class="ai-speech-bar">
-                    <span class="voice-meta-tag"><i data-lucide="sparkles"></i> PanaderIA Voz</span>
-                    <button class="btn-speak-bubble" onclick="speakBubbleText(this)">
-                      <i data-lucide="volume-2"></i> <span>Escuchar Bienvenida</span>
-                    </button>
-                  </div>
+                  <p>¡Hola! Soy <strong>PanaderIA</strong>, tu asistente de panadería. Puedes decirme cosas cotidianas como:</p>
+                  <p>🗣️ <em>"Se vendieron 10 croissants"</em>, <em>"Sacamos 50 baguettes del horno"</em>, <em>"Compramos 50 kilos de harina"</em> o <em>"¿Cuánto hay en caja?"</em></p>
+                  <p>Toca el <strong>botón de micrófono 🎤</strong> para hablarme o escribe en el recuadro de abajo.</p>
                 </div>
               </div>
             </div>
@@ -1409,13 +1399,13 @@
         </section>
 
         <!-- ============================================== -->
-        <!-- VIEW 10: HISTORIAL DE MOVIMIENTOS (DUEÑO) -->
+        <!-- VIEW 10: HISTORIAL DE MOVIMIENTOS (ADMIN) -->
         <!-- ============================================== -->
         <section id="view-auditoria" class="app-view">
           <div class="view-header-flex">
             <div>
               <h2>Historial de Movimientos de la Panadería</h2>
-              <p class="text-muted">Registro en la nube de cobros, compras, horneadas y dinero en caja.</p>
+              <p class="text-muted">Registro de todo lo que ocurre: cobros, compras de sacos, pan horneado y dinero de caja.</p>
             </div>
             <div class="view-header-actions">
               <button class="btn btn-secondary" onclick="exportAuditLogs()">
@@ -1427,10 +1417,10 @@
           <div class="card">
             <div class="card-header">
               <div class="card-title-group">
-                <h3><i data-lucide="history"></i> Movimientos del Día (Firestore)</h3>
+                <h3><i data-lucide="history"></i> Movimientos del Día</h3>
                 <p class="card-subtitle">Registro para control y tranquilidad del negocio</p>
               </div>
-              <span class="badge badge-success">Sincronizado ✅</span>
+              <span class="badge badge-success">Todo Registrado ✅</span>
             </div>
             <div class="card-body p-0">
               <div class="table-responsive">
@@ -1454,688 +1444,13 @@
           </div>
         </section>
 
-        <!-- ======================================== -->
-        <!-- VIEW: SUPERADMIN PANEL                    -->
-        <!-- ======================================== -->
-        <section id="view-superadmin" class="app-view">
-          <div class="view-header-flex">
-            <div>
-              <h2 style="display:flex;align-items:center;gap:10px;">
-                <span style="background:linear-gradient(135deg,#4f46e5,#7c3aed);border-radius:10px;padding:6px 10px;display:inline-flex;">
-                  <i data-lucide="shield-check" style="width:20px;height:20px;color:#fff;"></i>
-                </span>
-                Panel SuperAdmin Global
-              </h2>
-              <p class="text-muted">Control total de sucursales y usuarios del sistema. Acceso exclusivo.</p>
-            </div>
-            <div class="view-header-actions">
-              <button class="btn btn-secondary btn-sm" onclick="logoutSuperAdmin()">
-                <i data-lucide="log-out"></i> Cerrar Sesión SA
-              </button>
-            </div>
-          </div>
-
-          <!-- KPI CARDS -->
-          <div class="metrics-grid" style="margin-bottom:1.5rem;">
-            <div class="metric-card" style="border-left:4px solid #7c3aed;">
-              <div class="metric-icon" style="background:rgba(124,58,237,0.1);color:#7c3aed;">
-                <i data-lucide="users"></i>
-              </div>
-              <div class="metric-content">
-                <div class="metric-value" id="saKpiTotalUsers">–</div>
-                <div class="metric-label">Usuarios Registrados</div>
-              </div>
-            </div>
-            <div class="metric-card" style="border-left:4px solid #4f46e5;">
-              <div class="metric-icon" style="background:rgba(79,70,229,0.1);color:#4f46e5;">
-                <i data-lucide="store"></i>
-              </div>
-              <div class="metric-content">
-                <div class="metric-value" id="saKpiTotalBranches">3</div>
-                <div class="metric-label">Sucursales Activas</div>
-              </div>
-            </div>
-            <div class="metric-card" style="border-left:4px solid #0ea5e9;">
-              <div class="metric-icon" style="background:rgba(14,165,233,0.1);color:#0ea5e9;">
-                <i data-lucide="activity"></i>
-              </div>
-              <div class="metric-content">
-                <div class="metric-value" id="saKpiActiveSession">
-                  <span style="font-size:0.75rem;color:var(--text-muted);">memo96cr</span>
-                </div>
-                <div class="metric-label">Sesión SuperAdmin</div>
-              </div>
-            </div>
-          </div>
-
-          <!-- PANEL DOS COLUMNAS: SUCURSALES + USUARIOS -->
-          <div style="display:grid;grid-template-columns:320px 1fr;gap:1.5rem;align-items:start;">
-
-            <!-- GESTIÓN DE SUCURSALES -->
-            <div class="card">
-              <div class="card-header">
-                <div class="card-title-group">
-                  <h3><i data-lucide="store"></i> Sucursales Activas</h3>
-                  <p class="card-subtitle">Panadería de Carlos y Ana</p>
-                </div>
-              </div>
-              <div class="card-body" id="saBranchList">
-                <!-- Inyectado por JS -->
-              </div>
-            </div>
-
-            <!-- COLUMNA DERECHA: FORMULARIO DIRECTO + TABLA DE USUARIOS -->
-            <div style="display:flex; flex-direction:column; gap:1.5rem;">
-
-              <!-- FORMULARIO DIRECTO: CREAR NUEVO NEGOCIO / USUARIO -->
-              <div class="card" style="border:1.5px solid #818cf8; box-shadow:0 8px 24px rgba(99,102,241,0.12);">
-                <div class="card-header" style="background:linear-gradient(135deg, #1e1b4b, #312e81); color:#fff;">
-                  <div class="card-title-group">
-                    <h3 style="color:#fff;"><i data-lucide="user-plus" class="text-violet-300"></i> Registrar Nuevo Cliente / Negocio</h3>
-                    <p class="card-subtitle" style="color:#a5b4fc;">Genera una base de datos aislada en blanco en Firestore (correo opcional)</p>
-                  </div>
-                </div>
-                <div class="card-body">
-                  <form id="saInlineCreateUserForm" onsubmit="event.preventDefault(); saveInlineNewUser();">
-                    
-                    <!-- Tipo de Registro -->
-                    <div style="margin-bottom:1rem;">
-                      <label class="form-label" style="font-weight:700; font-size:0.8rem;">Tipo de Registro en la Plataforma *</label>
-                      <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
-                        <label style="display:flex; align-items:center; gap:8px; padding:0.6rem 0.8rem; border:1.5px solid #6366f1; border-radius:8px; cursor:pointer; background:rgba(99,102,241,0.05); font-size:0.85rem;">
-                          <input type="radio" name="saInlineAccountType" value="new_tenant" checked onchange="toggleInlineAccountType(this.value)">
-                          <div>
-                            <strong style="color:#4f46e5;">🏢 Nuevo Negocio</strong>
-                            <div style="font-size:0.7rem; color:var(--text-muted);">Base en blanco (0 productos)</div>
-                          </div>
-                        </label>
-                        <label style="display:flex; align-items:center; gap:8px; padding:0.6rem 0.8rem; border:1.5px solid var(--border-medium); border-radius:8px; cursor:pointer; background:var(--bg-surface); font-size:0.85rem;">
-                          <input type="radio" name="saInlineAccountType" value="branch_employee" onchange="toggleInlineAccountType(this.value)">
-                          <div>
-                            <strong>👤 Operador / Empleado</strong>
-                            <div style="font-size:0.7rem; color:var(--text-muted);">Sucursal de panadería</div>
-                          </div>
-                        </label>
-                      </div>
-                    </div>
-
-                    <!-- Campos de Comercio / Negocio -->
-                    <div id="saInlineTenantFields" style="background:linear-gradient(135deg, rgba(79,70,229,0.05), rgba(124,58,237,0.03)); border:1px solid rgba(99,102,241,0.2); border-radius:10px; padding:0.85rem; margin-bottom:1rem;">
-                      <div style="display:grid; grid-template-columns:1.5fr 1fr 1.2fr; gap:0.75rem;">
-                        <div>
-                          <label class="form-label" style="font-size:0.75rem;">Nombre del Negocio / Comercio *</label>
-                          <input type="text" id="saInBusinessName" class="form-input" placeholder="ej: Pastelería Dulce Aroma" style="font-size:0.88rem; padding:0.5rem 0.75rem;">
-                        </div>
-                        <div>
-                          <label class="form-label" style="font-size:0.75rem;">Giro Comercial</label>
-                          <select id="saInBusinessType" class="form-input" style="font-size:0.88rem; padding:0.5rem 0.75rem;">
-                            <option value="panaderia">🥖 Panadería</option>
-                            <option value="reposteria">🎂 Repostería</option>
-                            <option value="cafeteria">☕ Cafetería</option>
-                            <option value="pizzeria">🍕 Pizzería</option>
-                            <option value="market">🛒 Market / Abarrotes</option>
-                          </select>
-                        </div>
-                        <div>
-                          <label class="form-label" style="font-size:0.75rem;">Plan / Licencia SaaS</label>
-                          <select id="saInPlan" class="form-input" style="font-size:0.88rem; padding:0.5rem 0.75rem;">
-                            <option value="basica">⭐ Plan Básico (1 Caja)</option>
-                            <option value="pro" selected>🚀 Plan Pro (Multiturno)</option>
-                            <option value="premium">💎 Plan Premium Cloud</option>
-                          </select>
-                        </div>
-                      </div>
-                    </div>
-
-                    <!-- Fila 1: ID y Nombre -->
-                    <div style="display:grid; grid-template-columns:1fr 1.2fr; gap:0.75rem; margin-bottom:0.75rem;">
-                      <div>
-                        <label class="form-label" style="font-size:0.75rem;">ID / Código de Usuario / Cliente *</label>
-                        <input type="text" id="saInUsername" class="form-input" placeholder="ej: dulce_aroma, cliente01" autocomplete="off"
-                          style="font-family:monospace; font-size:0.88rem; padding:0.5rem 0.75rem;" oninput="this.value=this.value.toLowerCase().replace(/[^a-z0-9_]/g,'')">
-                      </div>
-                      <div>
-                        <label class="form-label" style="font-size:0.75rem;">Nombre del Responsable / Contacto *</label>
-                        <input type="text" id="saInNombre" class="form-input" placeholder="ej: Lic. Juan Pérez" style="font-size:0.88rem; padding:0.5rem 0.75rem;">
-                      </div>
-                    </div>
-
-                    <!-- Fila 2: Rol, PIN y Correo Opcional -->
-                    <div style="display:grid; grid-template-columns:1.2fr 1fr 1.4fr; gap:0.75rem; margin-bottom:0.75rem;">
-                      <div>
-                        <label class="form-label" style="font-size:0.75rem;">Rol del Perfil *</label>
-                        <select id="saInRol" class="form-input" style="font-size:0.88rem; padding:0.5rem 0.75rem;">
-                          <option value="admin">👑 Administrador / Propietario</option>
-                          <option value="cajero">🛒 Cajero / Mostrador</option>
-                          <option value="chef">👨‍🍳 Panadero / Chef</option>
-                          <option value="logistica">🚚 Repartidor</option>
-                        </select>
-                      </div>
-                      <div>
-                        <label class="form-label" style="font-size:0.75rem;">PIN (4 Dígitos) *</label>
-                        <input type="password" id="saInPin" class="form-input" placeholder="••••" maxlength="4"
-                          pattern="[0-9]{4}" inputmode="numeric" oninput="this.value=this.value.replace(/\D/g,'').slice(0,4)"
-                          style="font-size:0.88rem; padding:0.5rem 0.75rem; text-align:center; letter-spacing:3px;">
-                      </div>
-                      <div>
-                        <label class="form-label" style="font-size:0.75rem;">Correo Electrónico <span style="font-size:0.65rem; color:var(--text-muted);">(Opcional)</span></label>
-                        <input type="email" id="saInEmail" class="form-input" placeholder="correo@negocio.com (opcional)" style="font-size:0.88rem; padding:0.5rem 0.75rem;">
-                      </div>
-                    </div>
-
-                    <div id="saInErrorMsg" style="min-height:1.2rem; color:#ef4444; font-size:0.8rem; font-weight:600; margin-bottom:0.5rem;"></div>
-
-                    <div style="display:flex; justify-content:flex-end;">
-                      <button type="submit" id="btnSaveInlineUser" class="btn btn-primary" style="background:linear-gradient(135deg,#4f46e5,#7c3aed); border-color:#4f46e5; padding:0.65rem 1.25rem;">
-                        <i data-lucide="save"></i> Crear Negocio / Usuario y Sincronizar en Firestore
-                      </button>
-                    </div>
-                  </form>
-                </div>
-              </div>
-
-              <!-- GESTIÓN DE USUARIOS -->
-              <div class="card">
-                <div class="card-header">
-                  <div class="card-title-group">
-                    <h3><i data-lucide="users"></i> Usuarios y Negocios Registrados</h3>
-                    <p class="card-subtitle" id="saUsersSubtitle">Sincronizado con Firestore en tiempo real</p>
-                  </div>
-                  <button class="btn btn-primary btn-sm" onclick="openModal('newUserModal')" style="background:linear-gradient(135deg,#4f46e5,#7c3aed);border-color:#4f46e5;">
-                    <i data-lucide="user-plus"></i> Abrir Modal
-                  </button>
-                </div>
-                <div class="card-body p-0">
-                  <div class="table-responsive">
-                    <table class="data-table">
-                      <thead>
-                        <tr>
-                          <th>Usuario / ID</th>
-                          <th>Nombre / Comercio</th>
-                          <th>Rol</th>
-                          <th>Tipo / Sucursal</th>
-                          <th>Correo</th>
-                          <th>Estado</th>
-                          <th>Acciones</th>
-                        </tr>
-                      </thead>
-                      <tbody id="saUsersTableBody">
-                        <tr><td colspan="7" style="text-align:center;padding:2rem;color:var(--text-muted);">
-                          <i data-lucide="loader-circle" style="animation:spin 1s linear infinite;"></i> Cargando desde Firestore…
-                        </td></tr>
-                      </tbody>
-                    </table>
-                  </div>
-                </div>
-              </div>
-
-            </div>
-
-          </div>
-        </section>
-
-        <!-- ======================================== -->
-        <!-- VIEW: CONFIGURACIÓN DE HARDWARE & POS     -->
-        <!-- ======================================== -->
-        <section id="view-hardware" class="app-view">
-          <div class="view-header-flex">
-            <div>
-              <h2 style="display:flex; align-items:center; gap:10px;">
-                <span style="background:linear-gradient(135deg,#c27803,#f59e0b); border-radius:10px; padding:6px 10px; display:inline-flex;">
-                  <i data-lucide="printer" style="width:20px; height:20px; color:#fff;"></i>
-                </span>
-                Configuración de Periféricos & Hardware POS
-              </h2>
-              <p class="text-muted">Ajuste de impresoras térmicas (58mm/80mm), puertos y lectores de códigos de barras USB/HID.</p>
-            </div>
-            <div class="view-header-actions" style="display:flex; gap:8px;">
-              <span class="badge badge-success" id="hwStatusBadgePrinter"><i data-lucide="check-circle" style="width:12px; height:12px; vertical-align:-1px;"></i> Impresora Conectada</span>
-              <span class="badge badge-primary" id="hwStatusBadgeScanner"><i data-lucide="scan" style="width:12px; height:12px; vertical-align:-1px;"></i> Lector Activo</span>
-            </div>
-          </div>
-
-          <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(380px, 1fr)); gap:1.5rem; align-items:start;">
-
-            <!-- CARD 1: IMPRESORA TÉRMICA -->
-            <div class="card">
-              <div class="card-header" style="background:linear-gradient(135deg, rgba(194,120,3,0.08), rgba(245,158,11,0.04));">
-                <div class="card-title-group">
-                  <h3><i data-lucide="printer" class="text-primary"></i> Impresora Térmica de Tickets</h3>
-                  <p class="card-subtitle">Protocolo ESC/POS y formato de impresión</p>
-                </div>
-              </div>
-              <div class="card-body">
-                <form id="formPrinterConfig" onsubmit="event.preventDefault(); saveHardwarePrinterConfig();">
-                  
-                  <div class="form-group" style="margin-bottom:1rem;">
-                    <label class="form-label">Tipo de Conexión / Puerto *</label>
-                    <select id="hwPrinterPort" class="form-control" onchange="togglePrinterNetworkFields()">
-                      <option value="usb">🔌 USB Directo / Controlador del Sistema</option>
-                      <option value="network">🌐 Red Ethernet / Wi-Fi (TCP/IP)</option>
-                      <option value="bluetooth">📶 Bluetooth POS</option>
-                    </select>
-                  </div>
-
-                  <div id="hwNetworkFields" style="display:none; background:var(--bg-app); padding:0.9rem; border-radius:10px; border:1px solid var(--border-light); margin-bottom:1rem;">
-                    <div style="display:grid; grid-template-columns:2fr 1fr; gap:0.75rem;">
-                      <div>
-                        <label class="form-label" style="font-size:0.75rem;">Dirección IP de la Impresora</label>
-                        <input type="text" id="hwPrinterIp" class="form-control" placeholder="192.168.1.200" value="192.168.1.200">
-                      </div>
-                      <div>
-                        <label class="form-label" style="font-size:0.75rem;">Puerto RAW</label>
-                        <input type="number" id="hwPrinterNetworkPort" class="form-control" placeholder="9100" value="9100">
-                      </div>
-                    </div>
-                  </div>
-
-                  <div class="form-group" style="margin-bottom:1rem;">
-                    <label class="form-label">Ancho de Papel Térmico *</label>
-                    <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
-                      <label style="display:flex; align-items:center; gap:8px; padding:0.75rem; border:1.5px solid var(--border-medium); border-radius:10px; cursor:pointer; background:var(--bg-surface);">
-                        <input type="radio" name="hwPaperWidth" value="58" checked onchange="updatePaperWidthUI()">
-                        <div>
-                          <strong>58 mm</strong>
-                          <div style="font-size:0.72rem; color:var(--text-muted);">32 columnas estándar</div>
-                        </div>
-                      </label>
-                      <label style="display:flex; align-items:center; gap:8px; padding:0.75rem; border:1.5px solid var(--border-medium); border-radius:10px; cursor:pointer; background:var(--bg-surface);">
-                        <input type="radio" name="hwPaperWidth" value="80" onchange="updatePaperWidthUI()">
-                        <div>
-                          <strong>80 mm</strong>
-                          <div style="font-size:0.72rem; color:var(--text-muted);">48 columnas grande</div>
-                        </div>
-                      </label>
-                    </div>
-                  </div>
-
-                  <div class="form-group" style="margin-bottom:1rem;">
-                    <label class="form-label">Encabezado Personalizado del Ticket</label>
-                    <input type="text" id="hwTicketHeader" class="form-control" value="BakeMaster Pro · Panadería Artesanal" placeholder="Nombre de tu negocio">
-                  </div>
-
-                  <div class="form-group" style="margin-bottom:1rem;">
-                    <label class="form-label">Mensaje al Pie del Ticket</label>
-                    <input type="text" id="hwTicketFooter" class="form-control" value="¡Gracias por preferir nuestro pan recién horneado!" placeholder="Mensaje de cortesía">
-                  </div>
-
-                  <div style="background:var(--bg-app); padding:0.9rem; border-radius:10px; border:1px solid var(--border-light); margin-bottom:1.25rem;">
-                    <label style="font-size:0.78rem; font-weight:700; color:var(--text-main); display:block; margin-bottom:8px;">Opciones de Hardware ESC/POS</label>
-                    <div style="display:flex; flex-direction:column; gap:6px; font-size:0.85rem;">
-                      <label style="display:flex; align-items:center; gap:8px; cursor:pointer;">
-                        <input type="checkbox" id="hwOptCutter" checked>
-                        <span>Cortar papel automáticamente al terminar ticket (GS V)</span>
-                      </label>
-                      <label style="display:flex; align-items:center; gap:8px; cursor:pointer;">
-                        <input type="checkbox" id="hwOptDrawer" checked>
-                        <span>Enviar pulso para abrir cajón monedero (ESC p)</span>
-                      </label>
-                      <label style="display:flex; align-items:center; gap:8px; cursor:pointer;">
-                        <input type="checkbox" id="hwOptBarcode" checked>
-                        <span>Imprimir código de barras de verificación en ticket</span>
-                      </label>
-                    </div>
-                  </div>
-
-                  <div style="display:flex; gap:10px; flex-wrap:wrap;">
-                    <button type="button" class="btn btn-secondary" style="flex:1;" onclick="printHardwareTestTicket()">
-                      <i data-lucide="file-text"></i> Imprimir Ticket de Prueba
-                    </button>
-                    <button type="submit" class="btn btn-primary" style="flex:1;">
-                      <i data-lucide="save"></i> Guardar Ajustes
-                    </button>
-                  </div>
-                </form>
-              </div>
-            </div>
-
-            <!-- CARD 2: LECTOR DE CÓDIGO DE BARRAS -->
-            <div class="card">
-              <div class="card-header" style="background:linear-gradient(135deg, rgba(79,70,229,0.08), rgba(99,102,241,0.04));">
-                <div class="card-title-group">
-                  <h3><i data-lucide="scan-barcode" style="color:#4f46e5;"></i> Lector de Códigos de Barras</h3>
-                  <p class="card-subtitle">Modo escucha Keyboard Wedge / USB HID automático</p>
-                </div>
-              </div>
-              <div class="card-body">
-                <form id="formScannerConfig" onsubmit="event.preventDefault(); saveHardwareScannerConfig();">
-                  
-                  <!-- Interruptor Maestro -->
-                  <div style="display:flex; justify-content:space-between; align-items:center; background:linear-gradient(135deg,#1e1b4b,#312e81); padding:1rem 1.25rem; border-radius:12px; color:#fff; margin-bottom:1.25rem;">
-                    <div>
-                      <div style="font-weight:700; font-size:0.95rem;">Modo Escucha Global Activo</div>
-                      <div style="font-size:0.75rem; color:#a5b4fc;">Captura automática de pistolas lectoras USB e inalámbricas</div>
-                    </div>
-                    <label class="switch" style="position:relative; display:inline-block; width:48px; height:26px;">
-                      <input type="checkbox" id="hwScannerActive" checked onchange="toggleBarcodeListenerState(this.checked)" style="opacity:0; width:0; height:0;">
-                      <span class="slider round" style="position:absolute; cursor:pointer; top:0; left:0; right:0; bottom:0; background-color:#475569; transition:.3s; border-radius:34px;"></span>
-                    </label>
-                  </div>
-
-                  <div style="display:grid; grid-template-columns:1fr 1fr; gap:1rem; margin-bottom:1rem;">
-                    <div class="form-group">
-                      <label class="form-label">Terminador / Sufijo *</label>
-                      <select id="hwScannerSuffix" class="form-control">
-                        <option value="enter">Enter (↵) [Estándar]</option>
-                        <option value="tab">Tab (⇥)</option>
-                        <option value="none">Ninguno (por timeout)</option>
-                      </select>
-                    </div>
-                    <div class="form-group">
-                      <label class="form-label">Longitud Mínima Código</label>
-                      <input type="number" id="hwScannerMinLen" class="form-control" value="4" min="2" max="30">
-                    </div>
-                  </div>
-
-                  <div style="background:var(--bg-app); padding:0.9rem; border-radius:10px; border:1px solid var(--border-light); margin-bottom:1.25rem;">
-                    <label style="font-size:0.78rem; font-weight:700; color:var(--text-main); display:block; margin-bottom:8px;">Comportamiento al Escanear</label>
-                    <div style="display:flex; flex-direction:column; gap:6px; font-size:0.85rem;">
-                      <label style="display:flex; align-items:center; gap:8px; cursor:pointer;">
-                        <input type="checkbox" id="hwOptAudioBeep" checked>
-                        <span>Emitir pitido sonoro de confirmación (Beep acústico)</span>
-                      </label>
-                      <label style="display:flex; align-items:center; gap:8px; cursor:pointer;">
-                        <input type="checkbox" id="hwOptAutoPOS" checked>
-                        <span>Agregar automáticamente el producto al carrito en el Punto de Venta</span>
-                      </label>
-                    </div>
-                  </div>
-
-                  <!-- CAMPO DE PRUEBA RÁPIDA DE ESCANEO -->
-                  <div style="border:2px dashed #6366f1; border-radius:14px; padding:1.25rem; background:rgba(99,102,241,0.03); margin-bottom:1.25rem; text-align:center;">
-                    <div style="display:flex; align-items:center; justify-content:center; gap:8px; color:#4f46e5; font-weight:700; font-size:0.9rem; margin-bottom:6px;">
-                      <i data-lucide="scan"></i>
-                      <span>Campo de Prueba Rápida de Escaneo</span>
-                    </div>
-                    <p style="font-size:0.78rem; color:var(--text-muted); margin:0 0 10px;">Apunta tu lector de código de barras o tipea el código aquí para validar la lectura inmediata:</p>
-                    
-                    <input type="text" id="hwScannerTestInput" class="form-control" placeholder="⚡ Dispara el escáner aquí (ej: PT-001, OP-089, 7441001)..."
-                      style="text-align:center; font-family:monospace; font-size:1.05rem; font-weight:700; padding:0.75rem; border-color:#818cf8;"
-                      onkeydown="handleScannerTestKeydown(event)">
-
-                    <div id="hwScannerLiveResult" style="margin-top:10px; min-height:36px; display:flex; align-items:center; justify-content:center;">
-                      <span style="font-size:0.8rem; color:var(--text-muted); font-style:italic;">Esperando lectura de código…</span>
-                    </div>
-                  </div>
-
-                  <div style="display:flex; gap:10px;">
-                    <button type="submit" class="btn btn-primary" style="width:100%; background:linear-gradient(135deg,#4f46e5,#7c3aed); border-color:#4f46e5;">
-                      <i data-lucide="save"></i> Guardar Ajustes del Lector
-                    </button>
-                  </div>
-                </form>
-              </div>
-            </div>
-
-          </div>
-        </section>
-
       </div>
     </main>
   </div>
 
   <!-- ============================================== -->
-  <!-- OVERLAY: PANTALLA DE INICIO Y PORTAL DE ACCESO -->
+  <!-- MODALS -->
   <!-- ============================================== -->
-  <div class="pin-lock-overlay" id="loginPortalOverlay" style="display:flex;">
-    <div class="pin-lock-card" style="max-width:540px; width:100%; border-radius:24px; padding:0; overflow:hidden; box-shadow:0 30px 80px rgba(0,0,0,0.55); border:1px solid rgba(255,255,255,0.15);">
-      
-      <!-- Brand Header -->
-      <div style="background:linear-gradient(135deg, #1e1915, #2d241e, #130f0c); padding:2rem 2rem 1.25rem; text-align:center; color:#fff; position:relative;">
-        <div class="brand-logo justify-center mb-2">
-          <div class="logo-icon" style="background:linear-gradient(135deg,#c27803,#f59e0b); color:#fff; width:44px; height:44px; border-radius:12px; display:flex; align-items:center; justify-content:center; box-shadow:0 6px 16px rgba(194,120,3,0.4);">
-            <i data-lucide="croissant" style="width:24px; height:24px;"></i>
-          </div>
-          <div class="brand-text text-left" style="margin-left:10px;">
-            <h1 class="brand-title" style="color:#fff; font-size:1.4rem; margin:0; line-height:1.1;">BakeMaster<span style="color:#f59e0b;">Pro</span></h1>
-            <p class="brand-subtitle" style="color:#cbd5e1; font-size:0.75rem; margin:0;">Panadería de Carlos y Ana</p>
-          </div>
-        </div>
-        <p style="color:#94a3b8; font-size:0.82rem; margin:0.5rem 0 0;">Sistema ERP Cloud · Control Integral de Panaderías</p>
-
-        <!-- Mode Switcher Tabs -->
-        <div style="display:flex; background:rgba(255,255,255,0.08); padding:4px; border-radius:14px; margin-top:1.25rem; gap:4px;">
-          <button type="button" id="tabBtnSuperAdmin" class="login-portal-tab active" onclick="switchLoginTab('superadmin')" style="flex:1; padding:10px 14px; border:none; border-radius:10px; font-weight:700; font-size:0.85rem; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:8px; transition:all .2s; background:linear-gradient(135deg,#4f46e5,#7c3aed); color:#fff; box-shadow:0 4px 12px rgba(99,102,241,0.35);">
-            <i data-lucide="shield-check" style="width:16px; height:16px;"></i>
-            <span>SuperAdmin</span>
-          </button>
-          <button type="button" id="tabBtnEmpleado" class="login-portal-tab" onclick="switchLoginTab('empleado')" style="flex:1; padding:10px 14px; border:none; border-radius:10px; font-weight:700; font-size:0.85rem; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:8px; transition:all .2s; background:transparent; color:#94a3b8;">
-            <i data-lucide="key-round" style="width:16px; height:16px;"></i>
-            <span>Operador / PIN</span>
-          </button>
-        </div>
-      </div>
-
-      <!-- TAB 1: SUPERADMIN LOGIN FORM (EMAIL + PASSWORD) -->
-      <div id="tabContentSuperAdmin" style="padding:1.75rem 2rem; background:var(--bg-surface, #ffffff);">
-        <div style="text-align:center; margin-bottom:1.25rem;">
-          <div style="display:inline-flex; align-items:center; gap:6px; background:rgba(124,58,237,0.1); color:#7c3aed; padding:4px 12px; border-radius:999px; font-size:0.75rem; font-weight:700; margin-bottom:6px;">
-            <i data-lucide="lock" style="width:12px; height:12px;"></i> Acceso Maestro Global
-          </div>
-          <p style="font-size:0.82rem; color:var(--text-muted); margin:0;">Ingresa con tus credenciales de SuperAdministrador</p>
-        </div>
-
-        <form id="portalSuperAdminForm" onsubmit="event.preventDefault(); submitPortalSuperAdminLogin();">
-          <div style="margin-bottom:1rem;">
-            <label style="font-size:0.78rem; font-weight:700; color:var(--text-main); text-transform:uppercase; letter-spacing:0.04em; display:block; margin-bottom:6px;">
-              Correo Electrónico *
-            </label>
-            <div style="position:relative;">
-              <input type="email" id="portalSaEmail" required autocomplete="username" value="memo96cr@hotmail.com" placeholder="memo96cr@hotmail.com"
-                style="width:100%; padding:0.75rem 1rem 0.75rem 2.5rem; border:1.5px solid var(--border-medium, #cbd5e1); border-radius:12px; font-size:0.92rem; outline:none; background:var(--bg-app, #f8fafc); color:var(--text-main);">
-              <i data-lucide="mail" style="position:absolute; left:12px; top:50%; transform:translateY(-50%); width:18px; height:18px; color:var(--text-muted);"></i>
-            </div>
-          </div>
-
-          <div style="margin-bottom:0.75rem;">
-            <label style="font-size:0.78rem; font-weight:700; color:var(--text-main); text-transform:uppercase; letter-spacing:0.04em; display:block; margin-bottom:6px;">
-              Contraseña de Seguridad *
-            </label>
-            <div style="position:relative;">
-              <input type="password" id="portalSaPassword" required autocomplete="current-password" value="Juli2024" placeholder="Juli2024"
-                style="width:100%; padding:0.75rem 2.5rem 0.75rem 2.5rem; border:1.5px solid var(--border-medium, #cbd5e1); border-radius:12px; font-size:0.92rem; outline:none; background:var(--bg-app, #f8fafc); color:var(--text-main);">
-              <i data-lucide="lock" style="position:absolute; left:12px; top:50%; transform:translateY(-50%); width:18px; height:18px; color:var(--text-muted);"></i>
-              <button type="button" onclick="togglePasswordVisibility('portalSaPassword')" style="position:absolute; right:10px; top:50%; transform:translateY(-50%); background:none; border:none; color:var(--text-muted); cursor:pointer; padding:4px;">
-                <i data-lucide="eye" style="width:18px; height:18px;"></i>
-              </button>
-            </div>
-          </div>
-
-          <div id="portalSaErrorMsg" style="min-height:1.4rem; font-size:0.82rem; font-weight:600; color:#ef4444; margin-bottom:0.75rem; text-align:center;"></div>
-
-          <button type="submit" id="btnSubmitPortalSa" style="width:100%; padding:0.85rem; background:linear-gradient(135deg,#4f46e5,#7c3aed); color:#fff; border:none; border-radius:14px; font-size:0.95rem; font-weight:800; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:8px; box-shadow:0 8px 20px rgba(99,102,241,0.35); transition:all .2s;">
-            <i data-lucide="shield-check" style="width:18px; height:18px;"></i>
-            <span>Iniciar Sesión como SuperAdmin</span>
-          </button>
-        </form>
-
-        <div style="margin-top:1.25rem; padding-top:1rem; border-top:1px dashed var(--border-light, #e2e8f0); display:flex; justify-content:space-between; align-items:center; font-size:0.75rem; color:var(--text-muted);">
-          <span>Credencial: <strong>memo96cr@hotmail.com</strong></span>
-          <button type="button" class="btn-text-sm" onclick="fillSuperAdminCredentials()" style="color:#7c3aed; font-weight:700; font-size:0.75rem;">
-            ⚡ Auto-completar
-          </button>
-        </div>
-      </div>
-
-      <!-- TAB 2: OPERATOR PIN LOGIN -->
-      <div id="tabContentEmpleado" style="padding:1.5rem 1.75rem; background:var(--bg-surface, #ffffff); display:none;">
-        <div style="text-align:center; margin-bottom:1rem;">
-          <p class="text-xs text-muted" style="margin:0;">Selecciona tu usuario e ingresa tu PIN de 4 dígitos</p>
-        </div>
-
-        <!-- User Selector Buttons -->
-        <div class="pin-user-grid" id="pinUserGrid" style="margin-bottom:1rem;">
-          <div class="pin-user-card active" onclick="selectLockUser('admin')" data-user="admin">
-            <div class="pin-user-avatar">
-              <img src="https://images.unsplash.com/photo-1577219491135-ce391730fb2c?w=100&auto=format&fit=crop&q=80" alt="Carlos">
-            </div>
-            <strong>Carlos Mendoza</strong>
-            <span class="pin-user-role role-badge-owner">👑 Dueño</span>
-            <small class="pin-hint">PIN: 1234</small>
-          </div>
-
-          <div class="pin-user-card" onclick="selectLockUser('cajero')" data-user="cajero">
-            <div class="pin-user-avatar">
-              <img src="https://images.unsplash.com/photo-1580489944761-15a19d654956?w=100&auto=format&fit=crop&q=80" alt="Valentina">
-            </div>
-            <strong>Valentina Ríos</strong>
-            <span class="pin-user-role role-badge-cashier">🛒 Mostrador</span>
-            <small class="pin-hint">PIN: 2222</small>
-          </div>
-
-          <div class="pin-user-card" onclick="selectLockUser('chef')" data-user="chef">
-            <div class="pin-user-avatar">
-              <img src="https://images.unsplash.com/photo-1560250097-0b93528c311a?w=100&auto=format&fit=crop&q=80" alt="Javier">
-            </div>
-            <strong>Javier Beltrán</strong>
-            <span class="pin-user-role role-badge-baker">👨‍🍳 Panadero</span>
-            <small class="pin-hint">PIN: 3333</small>
-          </div>
-
-          <div class="pin-user-card" onclick="selectLockUser('logistica')" data-user="logistica">
-            <div class="pin-user-avatar">
-              <img src="https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?w=100&auto=format&fit=crop&q=80" alt="Andrés">
-            </div>
-            <strong>Andrés Villa</strong>
-            <span class="pin-user-role role-badge-driver">🚚 Repartidor</span>
-            <small class="pin-hint">PIN: 4444</small>
-          </div>
-        </div>
-
-        <!-- PIN Input Display -->
-        <div class="pin-display-wrapper">
-          <div class="pin-dots-display" id="pinDotsDisplay">
-            <span class="pin-dot"></span>
-            <span class="pin-dot"></span>
-            <span class="pin-dot"></span>
-            <span class="pin-dot"></span>
-          </div>
-          <div class="pin-error-msg" id="pinErrorMsg"></div>
-        </div>
-
-        <!-- Tactile Numeric Keypad -->
-        <div class="pin-keypad-grid">
-          <button type="button" class="pin-key-btn" onclick="enterPinDigit('1')">1</button>
-          <button type="button" class="pin-key-btn" onclick="enterPinDigit('2')">2</button>
-          <button type="button" class="pin-key-btn" onclick="enterPinDigit('3')">3</button>
-          <button type="button" class="pin-key-btn" onclick="enterPinDigit('4')">4</button>
-          <button type="button" class="pin-key-btn" onclick="enterPinDigit('5')">5</button>
-          <button type="button" class="pin-key-btn" onclick="enterPinDigit('6')">6</button>
-          <button type="button" class="pin-key-btn" onclick="enterPinDigit('7')">7</button>
-          <button type="button" class="pin-key-btn" onclick="enterPinDigit('8')">8</button>
-          <button type="button" class="pin-key-btn" onclick="enterPinDigit('9')">9</button>
-          <button type="button" class="pin-key-btn pin-key-fn" onclick="clearPinInput()"><i data-lucide="delete"></i></button>
-          <button type="button" class="pin-key-btn" onclick="enterPinDigit('0')">0</button>
-          <button type="button" class="pin-key-btn pin-key-ok" onclick="submitPinLogin()"><i data-lucide="check"></i></button>
-        </div>
-
-        <div class="pin-quick-unlock-bar" style="margin-top:0.75rem; text-align:center;">
-          <button type="button" class="btn-text-sm" onclick="unlockQuickUser(activeLockUserKey)">
-            ⚡ Desbloqueo Rápido de Prueba (1 Toque)
-          </button>
-        </div>
-      </div>
-
-    </div>
-  </div>
-
-  <!-- ============================================== -->
-  <!-- MODAL: DIAGNÓSTICO FIREBASE CLOUD FIRESTORE -->
-  <!-- ============================================== -->
-  <div class="modal-overlay" id="firebaseSyncModal">
-    <div class="modal-card">
-      <div class="modal-header bg-amber-soft">
-        <div class="modal-title-wrap">
-          <h3><i data-lucide="cloud" class="text-primary"></i> ☁️ Firebase Cloud Firestore</h3>
-          <p class="text-xs text-muted">Base de Datos: <strong>Panaderia de Carlos y Ana</strong></p>
-        </div>
-        <button class="modal-close-btn" onclick="closeModal('firebaseSyncModal')">&times;</button>
-      </div>
-      <div class="modal-body">
-
-        <!-- Connection State Banner -->
-        <div class="firebase-connection-banner" id="fbConnectionBanner" style="display:flex; align-items:center; gap:10px; padding:10px 14px; border-radius:10px; margin-bottom:14px; background:var(--success-bg, #ecfdf5); border:1px solid var(--success-border, #86efac);">
-          <span style="font-size:1.4rem;" id="fbConnectionIcon">🟢</span>
-          <div style="flex:1;">
-            <strong id="fbConnectionTitle" style="font-size:0.88rem;">Conectado a Firestore</strong>
-            <div id="firebaseLastSync" style="font-size:0.72rem; color:var(--text-muted);">Última sync: —</div>
-          </div>
-        </div>
-
-        <div class="firebase-sync-status-grid">
-          <div class="sync-status-item done">
-            <i data-lucide="shopping-cart"></i>
-            <div>
-              <strong>Colección `ventas`</strong>
-              <small>Tickets POS y cobros en colones (₡)</small>
-            </div>
-            <span class="badge badge-success">Sincronizado ✅</span>
-          </div>
-
-          <div class="sync-status-item done">
-            <i data-lucide="boxes"></i>
-            <div>
-              <strong>Colección `almacen_ingredientes`</strong>
-              <small>Harinas, mantequillas y existencias</small>
-            </div>
-            <span class="badge badge-success">Sincronizado ✅</span>
-          </div>
-
-          <div class="sync-status-item done">
-            <i data-lucide="flame"></i>
-            <div>
-              <strong>Colección `turnos_horno`</strong>
-              <small>Lotes en horno y recetas activas</small>
-            </div>
-            <span class="badge badge-success">Sincronizado ✅</span>
-          </div>
-
-          <div class="sync-status-item done">
-            <i data-lucide="wallet"></i>
-            <div>
-              <strong>Colección `caja_turnos`</strong>
-              <small>Arqueo de billetes y dinero en caja</small>
-            </div>
-            <span class="badge badge-success">Sincronizado ✅</span>
-          </div>
-        </div>
-
-        <div class="card mt-3" style="background:#f8fafc; border: 1px solid var(--border-light); padding: 14px;">
-          <h4 style="font-size: 0.9rem; margin-bottom: 8px; color: var(--text-main);"><i data-lucide="settings"></i> Ajustes de Conexión Firebase</h4>
-          <p style="font-size:0.72rem; color:var(--text-muted); margin-bottom:10px;">Copia estos datos desde la consola de Firebase → Configuración del proyecto → Apps web.</p>
-          <div class="grid-2-cols">
-            <div class="form-group mb-2">
-              <label style="font-size: 0.75rem;">Nombre del Proyecto:</label>
-              <input type="text" id="fbConfigProjectName" class="form-control form-control-sm" value="Panaderia de Carlos y Ana" readonly>
-            </div>
-            <div class="form-group mb-2">
-              <label style="font-size: 0.75rem;">Project ID de Firestore:</label>
-              <input type="text" id="fbConfigProjectId" class="form-control form-control-sm" value="panaderia-de-carlos-y-ana" placeholder="ej. panaderia-de-carlos-y-ana">
-            </div>
-          </div>
-          <div class="form-group mb-0">
-            <label style="font-size: 0.75rem;">API Key (Web App SDK):</label>
-            <input type="text" id="fbConfigApiKey" class="form-control form-control-sm" value="AIzaSyDyxMAcLGzfYkBbRZlI8fKVGRYXMYjoIVM" placeholder="ej. AIzaSyC...">
-          </div>
-        </div>
-
-        <div class="alert-box-info mt-3">
-          <i data-lucide="info"></i>
-          <span>Todas las ventas, cobros y modificaciones que realices en el sistema local se guardan de forma instantánea y segura en la base de datos de Firebase Cloud Firestore. Si editas el Project ID o API Key, el sistema se reconectará automáticamente.</span>
-        </div>
-
-        <div class="modal-footer mt-4" style="display:flex; gap:8px; flex-wrap:wrap;">
-          <button class="btn btn-secondary" onclick="closeModal('firebaseSyncModal')">Cerrar</button>
-          <button class="btn btn-primary" onclick="saveCustomFirebaseConfig()">
-            <i data-lucide="save"></i> Guardar Credenciales y Reconectar
-          </button>
-          <button class="btn btn-primary" style="background:var(--success);border-color:var(--success);" onclick="forceFirebaseCloudSync()">
-            <i data-lucide="refresh-cw"></i> ⚡ Forzar Sincronización Ahora
-          </button>
-        </div>
-      </div>
-    </div>
-  </div>
 
   <!-- MODAL TÁCTIL 1: SACAR DEL HORNO -->
   <div class="modal-overlay" id="quickBakeModal">
@@ -2210,7 +1525,7 @@
 
           <div class="alert-box-info mt-2">
             <i data-lucide="info"></i>
-            <span>Al guardar, el sistema descontará la harina y mantequilla del almacén e ingresará el pan caliente a la vitrina de venta (sincronizado con Firebase).</span>
+            <span>Al guardar, el sistema descontará la harina, mantequilla y levadura del almacén e ingresará el pan caliente a la vitrina de venta.</span>
           </div>
 
           <div class="modal-footer mt-4">
@@ -2286,7 +1601,7 @@
     </div>
   </div>
 
-  <!-- Modal: Ticket Imprimible / Factura POS -->
+  <!-- Modal: Ticket Imprimible / Factura de Venta POS -->
   <div class="modal-overlay" id="ticketModal">
     <div class="modal-card ticket-modal-card">
       <div class="modal-header">
@@ -2296,9 +1611,9 @@
       <div class="modal-body">
         <div class="receipt-paper" id="printableReceipt">
           <div class="receipt-header">
-            <h2 class="receipt-brand">🥐 PANADERIA DE CARLOS Y ANA</h2>
+            <h2 class="receipt-brand">🥐 BAKEMASTER ARTESANAL</h2>
             <p>Cédula Jurídica: 3-101-892341</p>
-            <p>Obrador & Tienda Central - San José, Costa Rica</p>
+            <p>Obrador & Tienda Central - Escazú, San José</p>
             <p>Tel: +506 2204-8890</p>
             <div class="receipt-divider">--------------------------------</div>
             <p><strong>FACTURA DE VENTA #<span id="recTicketNum">1049</span></strong></p>
@@ -2373,7 +1688,7 @@
           </div>
           <div class="form-group">
             <label>Instrucciones de Amasado:</label>
-            <textarea id="newRecInstructions" class="form-control" rows="2" placeholder="Autólisis 30 min, fermentación en bloque..."></textarea>
+            <textarea id="newRecInstructions" class="form-control" rows="2" placeholder="Autólisis 30 min, amasado en espiral, fermentación en bloque 18h a 4°C..."></textarea>
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" onclick="closeModal('recipeModal')">Cancelar</button>
@@ -2390,7 +1705,7 @@
       <div class="modal-header bg-amber-soft">
         <div class="modal-title-wrap">
           <h3><i data-lucide="plus-circle" class="text-success"></i> + Llegó Harina o Ingrediente (Entrada Fácil)</h3>
-          <p class="text-xs text-muted">Anota las compras de sacos de harina o mantequilla (se guardan en Firebase).</p>
+          <p class="text-xs text-muted">Anota las compras de sacos de harina, mantequilla o empaques en 4 pasos sencillos.</p>
         </div>
         <button class="modal-close-btn" onclick="closeModal('quickStockEntryModal')">&times;</button>
       </div>
@@ -2401,7 +1716,7 @@
               <i data-lucide="package-check"></i> Ingrediente Existente
             </button>
             <button type="button" class="mode-tab" id="tabModeNew" onclick="switchQuickEntryMode('new')">
-              <i data-lucide="sparkles"></i> Crear Nuevo Ingrediente
+              <i data-lucide="sparkles"></i> Crear Nuevo Ingrediente o Pan
             </button>
           </div>
 
@@ -2493,7 +1808,7 @@
       <div class="modal-header">
         <div>
           <h3><i data-lucide="sliders"></i> Corregir Cantidad en Almacén</h3>
-          <p class="text-xs text-muted">Ajuste para corregir cantidades por conteo físico.</p>
+          <p class="text-xs text-muted">Ajuste rápido para corregir cantidades por conteo físico.</p>
         </div>
         <button class="modal-close-btn" onclick="closeModal('stockMovementModal')">&times;</button>
       </div>
@@ -2528,6 +1843,49 @@
             <button type="submit" class="btn btn-primary"><i data-lucide="check"></i> Guardar Cantidad</button>
           </div>
         </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: Role Switcher Demo Tool -->
+  <div class="modal-overlay" id="roleSwitchModal">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3><i data-lucide="user-cog"></i> Cambiar Perfil de Usuario (Demostración)</h3>
+        <button class="modal-close-btn" onclick="closeModal('roleSwitchModal')">&times;</button>
+      </div>
+      <div class="modal-body">
+        <p class="text-sm text-muted mb-3">Selecciona un perfil para probar las distintas pantallas:</p>
+        <div class="role-selector-cards">
+          <div class="role-card active" onclick="switchUserRole('admin', 'Carlos Mendoza', 'Dueño / Maestro Panadero')">
+            <div class="role-icon bg-purple"><i data-lucide="crown"></i></div>
+            <div>
+              <strong>Dueño / Administrador</strong>
+              <p>Acceso total al resumen diario, recetas, compras y caja.</p>
+            </div>
+          </div>
+          <div class="role-card" onclick="switchUserRole('chef', 'Javier Beltrán', 'Jefe de Obrador / Panadero')">
+            <div class="role-icon bg-amber"><i data-lucide="flame"></i></div>
+            <div>
+              <strong>Panadero / Jefe de Obrador</strong>
+              <p>Horneadas, recetas, ingredientes y desperdicios.</p>
+            </div>
+          </div>
+          <div class="role-card" onclick="switchUserRole('cajero', 'Valentina Ríos', 'Atención Mostrador / Cajera')">
+            <div class="role-icon bg-green"><i data-lucide="shopping-cart"></i></div>
+            <div>
+              <strong>Caja / Mostrador</strong>
+              <p>Cobro de tickets, conteo de billetes y clientes.</p>
+            </div>
+          </div>
+          <div class="role-card" onclick="switchUserRole('logistica', 'Andrés Villa', 'Repartidor / Envíos')">
+            <div class="role-icon bg-blue"><i data-lucide="truck"></i></div>
+            <div>
+              <strong>Repartidor / Envíos</strong>
+              <p>Pedidos a cafeterías y rutas de entrega.</p>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -2568,160 +1926,6 @@
     </div>
   </div>
 
-  <!-- ============================================ -->
-  <!-- MODAL: SUPERADMIN LOGIN                       -->
-  <!-- ============================================ -->
-  <div class="modal-overlay" id="superAdminLoginModal" style="display:none; align-items:center; justify-content:center; background:rgba(0,0,0,0.75); backdrop-filter:blur(6px); z-index:9999;">
-    <div class="modal-card" style="max-width:420px; width:100%; border-radius:20px; overflow:hidden; box-shadow:0 25px 60px rgba(0,0,0,0.45);">
-      <!-- Header -->
-      <div style="background:linear-gradient(135deg,#1e1b4b,#312e81,#4c1d95); padding:2rem 2rem 1.5rem; text-align:center; position:relative;">
-        <div style="width:56px;height:56px;background:rgba(255,255,255,0.12);border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 0.75rem;">
-          <i data-lucide="shield-check" style="width:28px;height:28px;color:#c4b5fd;"></i>
-        </div>
-        <h3 style="color:#fff;font-size:1.25rem;font-weight:800;margin:0 0 0.25rem;">Acceso SuperAdmin</h3>
-        <p style="color:#a5b4fc;font-size:0.78rem;margin:0;">Panel de administración global del sistema</p>
-        <button onclick="closeSuperAdminLogin()" style="position:absolute;top:14px;right:16px;background:rgba(255,255,255,0.1);border:none;color:#e0e7ff;border-radius:50%;width:30px;height:30px;cursor:pointer;font-size:1rem;line-height:1;">&times;</button>
-      </div>
-      <!-- Body -->
-      <div style="padding:1.75rem 2rem;">
-        <div style="margin-bottom:1rem;">
-          <label style="font-size:0.78rem;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.05em;display:block;margin-bottom:6px;">Correo electrónico</label>
-          <input type="email" id="saLoginEmail" autocomplete="off" placeholder="correo@ejemplo.com"
-            style="width:100%;padding:0.6rem 0.9rem;border:1.5px solid var(--border);border-radius:10px;font-size:0.9rem;outline:none;background:var(--bg-card);color:var(--text-main);"
-            onkeydown="if(event.key==='Enter') document.getElementById('saLoginPass').focus()">
-        </div>
-        <div style="margin-bottom:0.5rem;">
-          <label style="font-size:0.78rem;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.05em;display:block;margin-bottom:6px;">Contraseña</label>
-          <div style="position:relative;">
-            <input type="password" id="saLoginPass" autocomplete="off" placeholder="••••••••"
-              style="width:100%;padding:0.6rem 0.9rem;border:1.5px solid var(--border);border-radius:10px;font-size:0.9rem;outline:none;background:var(--bg-card);color:var(--text-main);"
-              onkeydown="if(event.key==='Enter') submitSuperAdminLogin()">
-          </div>
-        </div>
-        <div id="saLoginError" style="min-height:1.5rem;color:#ef4444;font-size:0.8rem;margin-bottom:0.75rem;font-weight:600;"></div>
-        <button onclick="submitSuperAdminLogin()" style="width:100%;padding:0.8rem;background:linear-gradient(135deg,#4f46e5,#7c3aed);color:#fff;border:none;border-radius:12px;font-size:0.95rem;font-weight:800;cursor:pointer;letter-spacing:0.02em;transition:opacity .2s;" onmouseover="this.style.opacity='.9'" onmouseout="this.style.opacity='1'">
-          <i data-lucide="shield-check" style="width:16px;height:16px;vertical-align:-2px;margin-right:6px;"></i>Acceder como SuperAdmin
-        </button>
-      </div>
-    </div>
-  </div>
-
-  <!-- ============================================ -->
-  <!-- MODAL: NUEVO USUARIO (Email Opcional)         -->
-  <!-- ============================================ -->
-  <!-- ============================================ -->
-  <!-- MODAL: NUEVO USUARIO O INQUILINO (Base en Blanco) -->
-  <!-- ============================================ -->
-  <div class="modal-overlay" id="newUserModal">
-    <div class="modal-card" style="max-width:580px;">
-      <div class="modal-header" style="background:linear-gradient(135deg,#1e1b4b,#312e81);">
-        <div class="modal-title-wrap">
-          <h3 style="color:#fff;"><i data-lucide="user-plus" class="text-violet-300"></i> Registrar Usuario o Nuevo Negocio</h3>
-          <p style="color:#a5b4fc;font-size:0.78rem;margin:0;">Inicialización de base de datos aislada en blanco en Firestore</p>
-        </div>
-        <button class="modal-close-btn" style="color:#e0e7ff;" onclick="closeModal('newUserModal')">&times;</button>
-      </div>
-      <div class="modal-body">
-        
-        <!-- SELECTOR DE TIPO DE REGISTRO -->
-        <div style="margin-bottom:1.25rem;">
-          <label class="form-label" style="font-weight:800; color:var(--text-main);">Tipo de Registro en la Plataforma *</label>
-          <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
-            <label style="display:flex; align-items:center; gap:8px; padding:0.75rem; border:1.5px solid #6366f1; border-radius:10px; cursor:pointer; background:rgba(99,102,241,0.05);">
-              <input type="radio" name="nuAccountType" value="new_tenant" checked onchange="toggleAccountTypeFields(this.value)">
-              <div>
-                <strong style="color:#4f46e5;">🏢 Nuevo Negocio</strong>
-                <div style="font-size:0.7rem; color:var(--text-muted);">Base en blanco (0 productos)</div>
-              </div>
-            </label>
-            <label style="display:flex; align-items:center; gap:8px; padding:0.75rem; border:1.5px solid var(--border-medium); border-radius:10px; cursor:pointer; background:var(--bg-surface);">
-              <input type="radio" name="nuAccountType" value="branch_employee" onchange="toggleAccountTypeFields(this.value)">
-              <div>
-                <strong>👤 Empleado / Operador</strong>
-                <div style="font-size:0.7rem; color:var(--text-muted);">Para sucursal existente</div>
-              </div>
-            </label>
-          </div>
-        </div>
-
-        <!-- CAMPOS EXCLUSIVOS DE NUEVO NEGOCIO -->
-        <div id="nuTenantFields" style="background:linear-gradient(135deg, rgba(79,70,229,0.06), rgba(124,58,237,0.03)); border:1px solid rgba(99,102,241,0.25); border-radius:12px; padding:1rem; margin-bottom:1.25rem;">
-          <div style="display:grid; grid-template-columns:1.5fr 1fr; gap:1rem; margin-bottom:0.5rem;">
-            <div>
-              <label class="form-label" style="font-size:0.78rem;">Nombre del Comercio / Negocio *</label>
-              <input type="text" id="nuBusinessName" class="form-input" placeholder="ej: Pastelería Dulce Aroma">
-            </div>
-            <div>
-              <label class="form-label" style="font-size:0.78rem;">Giro Comercial</label>
-              <select id="nuBusinessType" class="form-input">
-                <option value="panaderia">🥖 Panadería</option>
-                <option value="reposteria">🎂 Repostería / Pastelería</option>
-                <option value="cafeteria">☕ Cafetería / Gourmet</option>
-                <option value="pizzeria">🍕 Pizzería</option>
-                <option value="abarrotes">🛒 Abarrotes / Market</option>
-              </select>
-            </div>
-          </div>
-          <div style="font-size:0.72rem; color:#4f46e5; display:flex; align-items:center; gap:6px; margin-top:6px;">
-            <i data-lucide="info" style="width:14px; height:14px;"></i>
-            <span>Se creará una base de datos aislada en Firestore completamente limpia para cargar productos desde cero.</span>
-          </div>
-        </div>
-
-        <div style="display:grid; grid-template-columns:1fr 1fr; gap:1rem; margin-bottom:1rem;">
-          <div>
-            <label class="form-label">ID / Usuario de Acceso *</label>
-            <input type="text" id="nuUsername" class="form-input" placeholder="ej: dulce_aroma, cajero01" autocomplete="off"
-              style="font-family:monospace;" oninput="this.value=this.value.toLowerCase().replace(/[^a-z0-9_]/g,'')">
-            <small style="color:var(--text-muted); font-size:0.7rem;">Solo letras, números y guión bajo</small>
-          </div>
-          <div>
-            <label class="form-label">Nombre del Contacto / Responsable *</label>
-            <input type="text" id="nuNombre" class="form-input" placeholder="ej: Lic. Fernando Morales">
-          </div>
-        </div>
-
-        <div style="display:grid; grid-template-columns:1fr 1fr; gap:1rem; margin-bottom:1rem;">
-          <div>
-            <label class="form-label">Rol del Usuario *</label>
-            <select id="nuRol" class="form-input">
-              <option value="admin">👑 Administrador / Propietario</option>
-              <option value="cajero">🛒 Cajero / Mostrador</option>
-              <option value="chef">👨‍🍳 Panadero / Chef Obrador</option>
-              <option value="logistica">🚚 Repartidor / Despacho</option>
-            </select>
-          </div>
-          <div id="nuBranchContainer" style="display:none;">
-            <label class="form-label">Sucursal asignada *</label>
-            <select id="nuSucursal" class="form-input">
-              <option value="central">Sucursal Central</option>
-              <option value="norte">Sucursal Norte</option>
-              <option value="gourmet">Sucursal Gourmet</option>
-            </select>
-          </div>
-          <div id="nuPinContainer">
-            <label class="form-label">PIN / Contraseña de Acceso (4 dígitos) *</label>
-            <input type="password" id="nuPin" class="form-input" placeholder="••••" maxlength="4"
-              pattern="[0-9]{4}" inputmode="numeric" oninput="this.value=this.value.replace(/\D/g,'').slice(0,4)">
-          </div>
-        </div>
-
-        <div style="margin-bottom:1rem;">
-          <label class="form-label">Correo Electrónico <span style="font-size:0.7rem; color:var(--text-muted); font-weight:400;">(Opcional - no obligatorio)</span></label>
-          <input type="email" id="nuEmail" class="form-input" placeholder="contacto@negocio.com (opcional)">
-        </div>
-
-        <div id="nuErrorMsg" style="min-height:1.2rem; color:#ef4444; font-size:0.82rem; font-weight:600; margin-bottom:0.5rem;"></div>
-      </div>
-      <div class="modal-footer">
-        <button class="btn btn-secondary" onclick="closeModal('newUserModal')">Cancelar</button>
-        <button class="btn btn-primary" id="btnSaveNewUser" onclick="saveNewUser()" style="background:linear-gradient(135deg,#4f46e5,#7c3aed); border-color:#4f46e5;">
-          <i data-lucide="save"></i> Crear y Sincronizar en Firestore
-        </button>
-      </div>
-    </div>
-  </div>
-
   <!-- Toast Notification Container -->
   <div class="toast-container" id="toastContainer"></div>
 
@@ -2729,3 +1933,8 @@
   <script src="app.js"></script>
 </body>
 </html>
+
+
+           
+          
+
